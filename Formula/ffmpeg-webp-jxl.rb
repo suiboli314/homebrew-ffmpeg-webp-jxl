@@ -1,5 +1,5 @@
 class FfmpegWebpJxl < Formula
-  desc "Play, record, convert, and stream audio and video (ffmpeg plus libwebp and libjxl)"
+  desc "Play, record, convert, and stream audio and video (ffmpeg plus libwebp & libjxl)"
   homepage "https://ffmpeg.org/"
   # Keep url/sha256 in sync with homebrew-core's ffmpeg formula:
   # https://github.com/Homebrew/homebrew-core/blob/main/Formula/f/ffmpeg.rb
@@ -19,6 +19,7 @@ class FfmpegWebpJxl < Formula
   # Same dependencies as homebrew-core's ffmpeg ...
   depends_on "pkgconf" => :build
   depends_on "dav1d"
+  depends_on "jpeg-xl"
   depends_on "lame"
   depends_on "libvmaf"
   depends_on "libvpx"
@@ -26,13 +27,10 @@ class FfmpegWebpJxl < Formula
   depends_on "opus"
   depends_on "sdl2-compat"
   depends_on "svt-av1"
+  depends_on "webp"
   depends_on "x264"
   depends_on "x265"
   depends_on "xz"
-
-  # ... plus the two extras this tap exists for.
-  depends_on "jpeg-xl"
-  depends_on "webp"
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
