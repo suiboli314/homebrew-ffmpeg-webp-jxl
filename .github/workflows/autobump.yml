@@ -2,19 +2,26 @@
 name: brew bump
 
 on:
+  # Smoke test: run whenever this workflow file itself changes on main,
+  # so you don't have to wait for the schedule to find out it works.
   push:
     branches:
       - main
     paths:
       - .github/workflows/autobump.yml
   schedule:
-    # Every day at 0:50 UTC
-    - cron: 50 0 * * *
+    # minute hour day-of-month month day-of-week, in UTC: every day at 00:50 UTC
+    - cron: "50 0 * * *"
+  # Adds a "Run workflow" button on the Actions tab for manual runs
+  workflow_dispatch:
 
+# Start with no GITHUB_TOKEN permissions; the job below grants only what it needs
 permissions: {}
 
 defaults:
   run:
+    # Stricter than the default: stop on any error, unset variable or failed pipe,
+    # and print each command as it runs
     shell: bash -xeuo pipefail {0}
 
 jobs:
@@ -34,7 +41,11 @@ jobs:
 
       - name: Bump formulae
         env:
-          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Uses the personal access token if you created the HOMEBREW_BUMP_TOKEN
+          # secret, otherwise falls back to the built-in GITHUB_TOKEN.
+          # PRs opened with GITHUB_TOKEN do NOT trigger tests.yml; PRs opened with
+          # a personal access token do.
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_BUMP_TOKEN || secrets.GITHUB_TOKEN }}
           HOMEBREW_GIT_COMMITTER_NAME: ${{ steps.git_setup.outputs.name }}
           HOMEBREW_GIT_COMMITTER_EMAIL: ${{ steps.git_setup.outputs.email }}
           TAP_NAME: ${{ steps.set-up-homebrew.outputs.tap-name }}
