@@ -11,9 +11,11 @@ class FfmpegWebpJxl < Formula
   license "GPL-3.0-or-later"
   head "https://github.com/FFmpeg/FFmpeg.git", branch: "master"
 
-  # Track upstream releases through homebrew-core's ffmpeg formula.
+  # Same check homebrew-core's ffmpeg uses: newest release tarball on ffmpeg.org.
+  # Spelled out here instead of `formula "ffmpeg"`, which fails to resolve from a tap.
   livecheck do
-    formula "ffmpeg"
+    url "https://ffmpeg.org/download.html"
+    regex(/href=.*?ffmpeg[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   # Same dependencies as homebrew-core's ffmpeg ...
